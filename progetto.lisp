@@ -182,10 +182,14 @@ Checks:
 ;; If (eval expression) is a number, returns it. Else NIL
 
 (defun eval-as-number (expression)
-  (let ((result (handler-case (eval expression)
+  (let ((result 
+         (handler-case 
+             (eval expression)
 		  (error () nil)
 		  (warning () nil))))
-    (if (numberp result) result nil)))
+    (if (numberp result) 
+        result 
+      nil)))
 
 
 ;;; is-power-not-parsed/1
@@ -326,19 +330,23 @@ Checks:
   (cond ((eval-as-number expr) (list 'm (eval expr) 0 nil))
         ((atom expr) (list 'm 1 1 (list (list 'v 1 expr))))
         (t (let ((head (first expr)) (tail (rest expr)))
-             (if (is-operator head) ;;caso serio
+             (if (is-operator head)
                  (cond ((equal head '-)
                         (if (listp (second expr))
                             (parse-power-negative-coeff (second expr))
-			    (list 'm -1 1 (list 'v 1(second expr)))))
+			    (list 'm -1 1 (list 'v 1 (second expr)))))
                        ((equal head '*)
                         (if (eql (build-coefficient tail) 0) (list 'm 0 0 nil)
 			    (let ((vps (build-varpowers tail 0)))
 			      (append (list 'm) (list (build-coefficient tail))
-				      (list (first vps)) (list (rest vps)))))))
+				      (list (first vps)) (list (rest vps))))))
+                       ((equal head '+)
+                        (if (= 1 (length (monomials (as-polynomial expr))))
+                            (first (monomials (as-polynomial expr)))
+                          (error "Not parsable as a monomial"))))
 		 (if (is-power-not-parsed head)
 		     (parse-power head)
-		     (list 'm 1 1 (list 'v 1 head))))))))
+		     (list 'm 1 1 (list (list 'v 1 head)))))))))
 
 
 ;;; as-polynomial/1

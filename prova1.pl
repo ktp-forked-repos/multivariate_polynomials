@@ -257,6 +257,7 @@ as_monomialCall(Expression, m(C, TD, VPs)) :-
 %%% This predicate pareses the 1st arg without sorting the resulting monomial
 
 as_monomial_unordered(0, m(0, 0, [])) :- !.
+as_monomial_unordered(Mono1 + Mono2, _) :- false.
 as_monomial_unordered(-Mono, m(NC, TD, VPs)) :-
     !,
     as_monomial_unordered(Mono, m(C, TD, VPs)), !,
@@ -284,14 +285,6 @@ as_monomial_unordered(Head * A ^ B, m(C, TD, [v(B, A) | VPs])) :-
     atom(A), !,
     as_monomial_unordered(Head, m(C, TD1, VPs)),
     TD is TD1 + B.
-as_monomial_unordered(M1 + M2, m(C, TD, VPs)) :-
-    as_monomial_unordered(M1, m(C1, TD, VPs)), !,
-    as_monomial_unordered(M2, m(C2, TD, VPs)), !,
-    C is C1 + C2.
-as_monomial_unordered(M1 - M2, m(C, TD, VPs)) :-
-    as_monomial_unordered(M1, m(C1, TD, VPs)), !,
-    as_monomial_unordered(M2, m(C2, TD, VPs)), !,
-    C is C1 - C2.
 as_monomial_unordered(UglyCoeff, m(Z, 0, [])) :-
     UglyCoeff \= 0, !,
     arithmetic_expression_value(UglyCoeff, Z).

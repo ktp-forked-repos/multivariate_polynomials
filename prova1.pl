@@ -257,7 +257,7 @@ as_monomialCall(Expression, m(C, TD, VPs)) :-
 %%% This predicate pareses the 1st arg without sorting the resulting monomial
 
 as_monomial_unordered(0, m(0, 0, [])) :- !.
-as_monomial_unordered(Mono1 + Mono2, _) :- false.
+as_monomial_unordered(_ + _, _) :- false.
 as_monomial_unordered(-Mono, m(NC, TD, VPs)) :-
     !,
     as_monomial_unordered(Mono, m(C, TD, VPs)), !,

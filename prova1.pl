@@ -661,6 +661,7 @@ pprint_polynomial(Poly) :-
     pprint_polynomial_call(PolyParsed),
     nl.
 
+
 %%% pprint_polynomial_call/1
 %%% This predicate prints the Poly on the standard output
 

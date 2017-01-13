@@ -35,10 +35,12 @@
 	(if (listp vps)
 	    vps
 	    (error "le variabili non sono scritte correttamente")))
+    (if (is-polynomial mono) 
+        (error "Mono expected, got Poly")
       (let* ((parsed-mono (as-monomial mono)) (vps (fourth parsed-mono)))
 	(if (listp vps)
 	    vps
-	    (error "le variabili non sono scritte correttamente")))))
+          (error "le variabili non sono scritte correttamente"))))))
 
 
 ;;; monomial-degree/1
@@ -48,8 +50,10 @@
   (if (and (= (length mono) 4) (eq 'm (first mono)))
       (let ((mtd (third mono)))
         (if (>= mtd 0) mtd (error "Grado minore di 0")))
+    (if (is-polynomial mono) 
+        (error "Mono expected, got Poly")
       (let* ((parsed-mono (as-monomial mono)) (mtd (third parsed-mono)))
-	(if (>= mtd 0) mtd (error "Grado minore di 0")))))
+	(if (>= mtd 0) mtd (error "Grado minore di 0"))))))
 
 
 ;;; monomial-coefficient/1
@@ -116,7 +120,9 @@ Checks:
 ;; Returns the list of all the monomials in a poly
 
 (defun monomials (p)
-  (if (equal (first p) 'poly) (first (rest p)) (monomials (to-polynomial p))))
+  (if (equal (first p) 'poly) 
+      (first (rest p)) 
+    (monomials (to-polynomial p))))
 
 
 ;;; is-polynomial/1
@@ -134,8 +140,10 @@ Checks:
 ;; Returns the list of all the coefficients in a poly
 
 (defun coefficients (p)
-  (let* ((parsed-p (to-polynomial p)) (monomials (monomials parsed-p)))
-    (if (null monomials) '(0)
+  (let* ((parsed-p (to-polynomial p)) 
+         (monomials (monomials parsed-p)))
+    (if (null monomials) 
+        '(0)
 	(mapcar 'monomial-coefficient monomials))))
 
 

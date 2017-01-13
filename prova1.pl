@@ -119,7 +119,7 @@ get_coefficients_from_polynomialCall(poly([HeadMono | RestMono]),
 %%% monomials composing the polynomial passed as the first arg
 
 
-coefficients(poly([]), []) :- !.
+coefficients(poly([]), [0]) :- !.
 coefficients(Poly, Coefficients) :-
     to_polynomial(Poly, PolyParsed),
     !,

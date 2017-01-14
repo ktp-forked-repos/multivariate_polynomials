@@ -19,8 +19,7 @@ is_monomial(m(_C, TD, VPs)) :-
     foreach(member(V, VPs), is_varpower(V)),
     sum_degrees_variables(VPs, TD).
 
-is_monomial(poly([SingleMono])) :-
-    is_monomial(SingleMono).
+is_monomial(poly(_)) :- false.
 
 
 %%% is_monomial_parsed/1
